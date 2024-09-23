@@ -16,10 +16,10 @@ deployment "development" {
   }
 }
 
-orchestrate "auto_approve" "no_changes" {
-  check {
-    # Check that the pet component has no changes
-    condition = context.plan.component_changes["component.kube"].total == 0
-    reason = "Not auto-approved because changes proposed to kube component."
-  }
+orchestrate "auto_approve" "addition_plans" {
+ check {
+     # Only auto-approve in development environment if no resources are being removed
+     condition = context.plan.changes.remove == 0
+     reason = "Plan has ${context.plan.changes.remove} resources to be removed."
+ }
 }

@@ -15,3 +15,11 @@ deployment "development" {
     default_tags        = { stacks-preview-example = "eks-deferred-stack" }
   }
 }
+
+orchestrate "auto_approve" "no_changes" {
+  check {
+    # Check that the pet component has no changes
+    condition = context.plan.component_changes["component.kube"].total == 0
+    reason = "Not auto-approved because changes proposed to kube component."
+  }
+}
